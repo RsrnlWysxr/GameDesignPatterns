@@ -4,10 +4,6 @@
 '''
 
 
-def press(input):
-    print input
-
-
 def jump_action():
     print "jump"
 
@@ -24,14 +20,14 @@ def reload_bullet_action():
     print "reload"
 
 
-def Input():
-    if press('x'):
+def normal_input(key):
+    if key == 'x':
         jump_action()
-    elif press('y'):
+    elif key == 'y':
         fire_gun_action()
-    elif press('a'):
+    elif key == 'a':
         swap_weapon_action()
-    elif press('b'):
+    elif key == 'b':
         reload_bullet_action()
 
 
@@ -68,12 +64,28 @@ fire_gun = PressAction('y', fire_gun_action)
 swap_weapon = PressAction('a', swap_weapon_action)
 reload_bullet = PressAction('b', reload_bullet_action)
 
+jump.reset_press('j')
+fire_gun.reset_press('r')
+swap_weapon.reset_press('s')
+reload_bullet.reset_press('b')
+
 
 class InputHander(object):
     def __init__(self):
         self.press_actions = PressAction.INSTANCE
 
-    def input(self):
-        press_action = self.press_actions.get()
+    def advance_input(self, key):
+        press_action = self.press_actions.get(key)
         if press_action:
             press_action.execute()
+
+
+def main():
+    down_key = raw_input("Down key: ")
+    input_hander = InputHander()
+    input_hander.advance_input(down_key)
+
+
+if __name__ == "__main__":
+    while True:
+        main()
